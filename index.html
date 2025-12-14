@@ -388,6 +388,12 @@ body {
     min-width: 140px;
 }
 
+.draw-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
 #banker-draw {
     background: linear-gradient(to right, #FFECB3 0%, #FFC107 100%);
     color: #333;
@@ -413,6 +419,12 @@ body {
     justify-content: center;
     gap: 10px;
     min-width: 100px;
+}
+
+.win-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
 }
 
 #banker-win {
@@ -1206,6 +1218,13 @@ const accuracyRateEl = document.getElementById('accuracyRate');
 const closeStatsBtn = document.getElementById('closeStats');
 const rotationHint = document.getElementById('rotationHint');
 
+// 按鈕元素
+const bankerDrawBtn = document.getElementById('banker-draw');
+const playerDrawBtn = document.getElementById('player-draw');
+const bankerWinBtn = document.getElementById('banker-win');
+const playerWinBtn = document.getElementById('player-win');
+const tieBtn = document.getElementById('tie');
+
 // 檢查設備方向
 function checkOrientation() {
     const isPortrait = window.innerHeight > window.innerWidth;
@@ -1231,8 +1250,41 @@ function checkOrientation() {
 window.addEventListener('resize', checkOrientation);
 window.addEventListener('orientationchange', checkOrientation);
 
+// 更新按鈕狀態
+function updateButtonStates() {
+    // 更新補牌按鈕
+    if (gameState.playerNeedDraw && !gameState.playerDrawn) {
+        playerDrawBtn.disabled = false;
+    } else {
+        playerDrawBtn.disabled = true;
+    }
+    
+    if (gameState.bankerNeedDraw && !gameState.bankerDrawn) {
+        // 檢查補牌順序：如果閒家需要補牌但還沒補，則禁用莊家補牌
+        if (gameState.playerNeedDraw && !gameState.playerDrawn) {
+            bankerDrawBtn.disabled = true;
+        } else {
+            bankerDrawBtn.disabled = false;
+        }
+    } else {
+        bankerDrawBtn.disabled = true;
+    }
+    
+    // 更新結果按鈕
+    const canSelectResult = !gameState.resultSelected && 
+        (!gameState.playerNeedDraw || gameState.playerDrawn) &&
+        (!gameState.bankerNeedDraw || gameState.bankerDrawn);
+    
+    bankerWinBtn.disabled = !canSelectResult;
+    playerWinBtn.disabled = !canSelectResult;
+    tieBtn.disabled = !canSelectResult;
+}
+
 // 計時器函數
 function startTimer() {
+    // 確保只有一個計時器運行
+    stopTimer();
+    
     gameState.startTime = Date.now() - gameState.elapsedTime;
     gameState.timerInterval = setInterval(() => {
         gameState.elapsedTime = Date.now() - gameState.startTime;
@@ -1334,6 +1386,9 @@ function initGame() {
     // 渲染牌面
     renderCards();
     
+    // 更新按鈕狀態
+    updateButtonStates();
+    
     // 更新分數顯示
     scoreDisplay.textContent = gameState.score;
     gameScoreDisplay.textContent = gameState.currentScore;
@@ -1342,6 +1397,7 @@ function initGame() {
         console.log("=== 新局開始 ===");
         console.log("莊家牌:", gameState.bankerCards);
         console.log("閒家牌:", gameState.playerCards);
+        console.log("是否需要補牌 - 閒家:", gameState.playerNeedDraw, "莊家:", gameState.bankerNeedDraw);
     }
 }
 
@@ -1588,10 +1644,16 @@ function handleDrawCard(side) {
     // 重新檢查是否需要補牌
     checkDrawNeed();
     renderCards();
+    
+    // 更新按鈕狀態
+    updateButtonStates();
 }
 
 // 處理錯誤操作
 function handleError(message) {
+    // 停止計時器
+    stopTimer();
+    
     // 記錄這局為錯誤局數
     gameState.incorrectGames++;
     gameState.totalGames++;
@@ -1635,12 +1697,6 @@ function checkResult(selectedResult) {
     const gameEndTime = Date.now();
     const gameTime = gameEndTime - gameState.gameStartTime;
     
-    // 檢查是否違反補牌順序
-    if (gameState.drawOrderViolated) {
-        handleError("補牌次序錯誤！");
-        return;
-    }
-    
     // 檢查是否需要補牌但未補
     if ((gameState.playerNeedDraw && !gameState.playerDrawn) ||
         (gameState.bankerNeedDraw && !gameState.bankerDrawn)) {
@@ -1654,28 +1710,37 @@ function checkResult(selectedResult) {
     
     let actualResult;
     
-    // 特殊規則處理：首張四張牌時
-    if (gameState.bankerInitialScore === 8 || gameState.bankerInitialScore === 9) {
-        if (gameState.playerInitialScore < gameState.bankerInitialScore) {
-            actualResult = 'banker';
-        } else if (gameState.playerInitialScore === gameState.bankerInitialScore) {
-            actualResult = 'tie';
+    // 檢查是否有天生贏家（8或9點）
+    const bankerFinalScore = gameState.bankerScore;
+    const playerFinalScore = gameState.playerScore;
+    
+    // 如果有任何一方有8或9點
+    if (bankerFinalScore === 8 || bankerFinalScore === 9 || 
+        playerFinalScore === 8 || playerFinalScore === 9) {
+        
+        if (bankerFinalScore === 8 || bankerFinalScore === 9) {
+            if (playerFinalScore === 8 || playerFinalScore === 9) {
+                // 雙方都有8或9點，比較大小
+                if (bankerFinalScore > playerFinalScore) {
+                    actualResult = 'banker';
+                } else if (playerFinalScore > bankerFinalScore) {
+                    actualResult = 'player';
+                } else {
+                    actualResult = 'tie';
+                }
+            } else {
+                // 只有莊家有8或9點
+                actualResult = 'banker';
+            }
         } else {
+            // 只有閒家有8或9點
             actualResult = 'player';
-        }
-    } else if (gameState.playerInitialScore === 8 || gameState.playerInitialScore === 9) {
-        if (gameState.bankerInitialScore < gameState.playerInitialScore) {
-            actualResult = 'player';
-        } else if (gameState.bankerInitialScore === gameState.playerInitialScore) {
-            actualResult = 'tie';
-        } else {
-            actualResult = 'banker';
         }
     } else {
         // 普通規則
-        if (gameState.bankerScore > gameState.playerScore) {
+        if (bankerFinalScore > playerFinalScore) {
             actualResult = 'banker';
-        } else if (gameState.playerScore > gameState.bankerScore) {
+        } else if (playerFinalScore > bankerFinalScore) {
             actualResult = 'player';
         } else {
             actualResult = 'tie';
@@ -1728,31 +1793,35 @@ backButton.addEventListener('click', () => {
     gameScoreDisplay.textContent = '0';
     resetTimer();
     checkOrientation();
+    
+    // 移除橫屏類
+    document.body.classList.remove('landscape-mode');
+    gameContainer.classList.remove('active');
 });
 
-document.getElementById('banker-draw').addEventListener('click', () => {
+bankerDrawBtn.addEventListener('click', () => {
     handleDrawCard('banker');
 });
 
-document.getElementById('player-draw').addEventListener('click', () => {
+playerDrawBtn.addEventListener('click', () => {
     handleDrawCard('player');
 });
 
-document.getElementById('banker-win').addEventListener('click', () => {
+bankerWinBtn.addEventListener('click', () => {
     if (!gameState.resultSelected) {
         gameState.resultSelected = true;
         checkResult('banker');
     }
 });
 
-document.getElementById('player-win').addEventListener('click', () => {
+playerWinBtn.addEventListener('click', () => {
     if (!gameState.resultSelected) {
         gameState.resultSelected = true;
         checkResult('player');
     }
 });
 
-document.getElementById('tie').addEventListener('click', () => {
+tieBtn.addEventListener('click', () => {
     if (!gameState.resultSelected) {
         gameState.resultSelected = true;
         checkResult('tie');
