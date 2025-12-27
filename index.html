@@ -800,6 +800,399 @@
         margin: 8px 0;
         font-weight: bold;
     }
+    
+    .mode-card.practice {
+        background: linear-gradient(to bottom right, #e3f2fd, #bbdefb);
+    }
+    
+    .mode-card.challenge {
+        background: linear-gradient(to bottom right, #ffebee, #ffcdd2);
+    }
+    
+    .mode-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        border-color: var(--primary-color);
+    }
+    
+    .difficulty-option:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary-color);
+    }
+    
+    .answer-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+    
+    .nickname-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+    
+    .back-home-btn:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .back-home-btn:active {
+        transform: scale(0.95);
+    }
+    
+    .incorrect-nav:hover {
+        background: #2980b9;
+        transform: translateY(-50%) scale(1.05);
+    }
+    
+    .incorrect-grid-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    }
+    
+    .incorrect-grid-scroll-hint i {
+        animation: bounce 1.5s infinite;
+    }
+    
+    .copy-btn:hover {
+        background: #2980b9;
+        transform: translateY(-2px);
+    }
+    
+    .close-btn:hover {
+        background: #95a5a6;
+    }
+    
+    .share-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .result-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        padding-bottom: 5px;
+        max-height: calc(95vh - 150px);
+    }
+    
+    .result-footer {
+        margin-top: auto;
+        padding-top: 10px;
+        border-top: 1px solid #eee;
+    }
+    
+    #result-screen {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    
+    #result-screen h1 {
+        margin-top: 5px;
+        margin-bottom: 10px;
+        font-size: 1.8rem;
+    }
+    
+    .score {
+        font-size: 1.2rem !important;
+        margin: 8px 0 !important;
+    }
+    
+    .score span {
+        font-size: 1.5rem !important;
+    }
+    
+    .accuracy {
+        font-size: 1rem !important;
+        margin-bottom: 12px !important;
+    }
+    
+    .accuracy span {
+        font-size: 1.3rem !important;
+    }
+    
+    #restart-btn {
+        background: linear-gradient(45deg, var(--warning-color), #e67e22);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #restart-btn i {
+        display: none;
+    }
+    
+    .incorrect-grid-item > *:not(:last-child) {
+        margin-bottom: 3px;
+    }
+    
+    .incorrect-grid::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    .incorrect-grid::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 2px;
+    }
+    
+    .incorrect-grid::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 2px;
+    }
+    
+    .incorrect-grid::-webkit-scrollbar-thumb:hover {
+        background: #2980b9;
+    }
+    
+    @media (max-width: 480px) {
+        .sound-toggle {
+            top: 10px;
+            right: 10px;
+        }
+        
+        .bgm-toggle {
+            right: 55px;
+            top: 10px;
+        }
+        
+        .back-home-btn {
+            top: 8px;
+            left: 8px;
+            width: 32px;
+            height: 32px;
+        }
+        
+        .question-container {
+            padding: 10px;
+            min-height: 100px;
+            margin: 10px 5px;
+        }
+        
+        .question {
+            font-size: 2.5rem;
+        }
+        
+        .answer-input {
+            padding: 14px;
+            font-size: 1.6rem;
+            width: 95%;
+            min-height: 55px;
+        }
+        
+        .challenge-timer {
+            font-size: 0.8rem;
+        }
+        
+        .difficulty-option {
+            font-size: 0.95rem;
+            padding: 12px;
+            margin: 8px 0;
+        }
+        
+        .modal-content {
+            width: 95%;
+            padding: 15px;
+            max-width: 95%;
+        }
+        
+        .nickname-container {
+            padding: 15px;
+            margin: 15px 5px;
+        }
+        
+        .nickname-input {
+            padding: 12px;
+            font-size: 1.1rem;
+        }
+        
+        #result-screen {
+            padding: 5px;
+        }
+        
+        #result-screen h1 {
+            font-size: 1.5rem;
+            margin-top: 5px;
+            margin-bottom: 8px;
+        }
+        
+        .player-info-container {
+            padding: 10px;
+            margin: 5px 0 8px 0;
+        }
+        
+        .player-info-item {
+            margin: 5px 0;
+        }
+        
+        .player-info-label {
+            font-size: 0.8rem;
+        }
+        
+        .player-info-value {
+            font-size: 0.85rem;
+        }
+        
+        .result-badge {
+            font-size: 2rem;
+            margin: 5px 0 8px 0;
+        }
+        
+        .score {
+            font-size: 1.1rem !important;
+            margin: 6px 0 !important;
+        }
+        
+        .score span {
+            font-size: 1.3rem !important;
+        }
+        
+        .accuracy {
+            font-size: 0.95rem !important;
+            margin-bottom: 10px !important;
+        }
+        
+        .accuracy span {
+            font-size: 1.2rem !important;
+        }
+        
+        .timer {
+            font-size: 0.85rem !important;
+            margin-bottom: 6px !important;
+        }
+        
+        .incorrect-grid-container {
+            margin: 8px 0 5px 0;
+            min-height: 160px;
+        }
+        
+        .incorrect-grid-title {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        
+        .incorrect-grid {
+            height: 150px;
+            padding: 6px 4px;
+            gap: 6px;
+        }
+        
+        .incorrect-grid-item {
+            width: 160px;
+            padding: 12px 10px;
+        }
+        
+        .incorrect-grid-number {
+            font-size: 2rem;
+            margin-bottom: 3px;
+        }
+        
+        .incorrect-grid-answer {
+            font-size: 1.4rem;
+            margin-bottom: 1px;
+        }
+        
+        .incorrect-grid-correct {
+            font-size: 1.2rem;
+        }
+        
+        .incorrect-grid-label {
+            font-size: 0.65rem;
+            margin-top: 1px;
+        }
+        
+        .incorrect-grid-item > *:not(:last-child) {
+            margin-bottom: 2px;
+        }
+        
+        .incorrect-empty {
+            padding: 15px 12px;
+            height: 130px;
+            font-size: 0.85rem;
+        }
+        
+        .incorrect-nav {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .incorrect-nav.left {
+            left: -5px;
+        }
+        
+        .incorrect-nav.right {
+            right: -5px;
+        }
+        
+        .incorrect-nav i {
+            font-size: 0.7rem;
+        }
+        
+        .result-footer {
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+        
+        .share-btn {
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            width: 95%;
+            margin-top: 8px;
+        }
+        
+        .keypad {
+            gap: 10px;
+            padding: 0 10px;
+        }
+    }
+    
+    @media (max-width: 360px) {
+        .incorrect-grid-item {
+            width: 150px;
+            padding: 10px 8px;
+        }
+        
+        .incorrect-grid-number {
+            font-size: 1.8rem;
+        }
+        
+        .incorrect-grid-answer {
+            font-size: 1.3rem;
+        }
+        
+        .incorrect-grid-correct {
+            font-size: 1.1rem;
+        }
+        
+        .player-info-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+        }
+        
+        .player-info-label, .player-info-value {
+            font-size: 0.75rem;
+        }
+        
+        .key {
+            padding: 14px 5px;
+            font-size: 1.5rem;
+            min-height: 50px;
+        }
+        
+        .keypad {
+            gap: 8px;
+            padding: 0 8px;
+        }
+    }
     </style>
 </head>
 <body>
